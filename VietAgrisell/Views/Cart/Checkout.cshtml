@@ -1,0 +1,138 @@
+﻿@model IEnumerable<VietAgrisell.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">Thanh toán</h1>
+    <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active text-white">Thanh toán</li>
+    </ol>
+</div>
+<!-- Single Page Header End -->
+<!-- Checkout Page Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">Billing details</h1>
+        <form asp-action="Checkout">
+            <div class="row g-5">
+                <form asp-action="Checkout" asp-controller="Cart">
+                    <div class="col-md-12 col-lg-6 col-xl-7">
+                        <div class="form-check my-3">
+                            <input type="checkbox" name="Receiver" class="form-check-input" id="Receiver" value="false">
+                            <label class="form-check-label" for="Receiver">Bạn là người trực tiếp nhận hàng?</label>
+                        </div>
+                        <div class="form-item delivery-info">
+                            <label class="form-label my-3">Họ tên người nhận<sup>*</sup></label>
+                            <input type="text" name="CustomerName" class="form-control">
+                        </div>
+                        <div class="form-item delivery-info">
+                            <label class="form-label my-3">Địa chỉ nhận hàng<sup>*</sup></label>
+                            <input type="text" name="Address" class="form-control" placeholder="123 Fake Street">
+                        </div>
+                        <div class="form-item delivery-info">
+                            <label class="form-label my-3">Số điện thoại<sup>*</sup></label>
+                            <input type="text" name="Mobile" class="form-control">
+                        </div>
+                        <div class="form-item mt-4">
+                            <textarea name="Note" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú"></textarea>
+                        </div>
+                        <div class="text-center pt-4">
+                            <button type="submit" class="btn btn-primary btn-lg text-uppercase w-100">Thanh toán</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="row justify-content-center">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Products</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img src="@item.ImageUrl" class="img-fluid rounded-circle product-image" alt="@item.ProductName">
+                                            </td>
+                                            <td>@item.ProductName</td>
+                                            <td>@item.ProductPrice VND</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.TotalPrice</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="4" class="text-end">Tổng cộng:</td>
+                                        <td>@Model.Sum(p => p.TotalPrice) VND</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="border-top pt-3">
+                            <h5 class="mb-4">Shipping Options</h5>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="shippingFree" name="shippingOption" value="free">
+                                <label class="form-check-label" for="shippingFree">Miễn phí giao hàng</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="shippingFlatRate" name="shippingOption" value="flat-rate">
+                                <label class="form-check-label" for="shippingFlatRate">Giao hàng hoả tốc</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="shippingLocalPickup" name="shippingOption" value="local-pickup">
+                                <label class="form-check-label" for="shippingLocalPickup">Giao hàng tiết kiệm</label>
+                            </div>
+                        </div>
+
+                        <div class="border-top pt-3">
+                            <h5 class="mb-4">Phương thức thanh toán</h5>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="paymentBankTransfer" name="paymentMethod" value="bank-transfer">
+                                <label class="form-check-label" for="paymentBankTransfer">Chuyển khoản trực tiếp</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="paymentCheck" name="paymentMethod" value="check">
+                                <label class="form-check-label" for="paymentCheck">Kiểm tra thanh toán</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="paymentCashOnDelivery" name="paymentMethod" value="cash-on-delivery">
+                                <label class="form-check-label" for="paymentCashOnDelivery">Thanh toán khi nhận hàng</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="paymentPaypal" name="paymentMethod" value="paypal">
+                                <label class="form-check-label" for="paymentPaypal">Paypal</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Checkout Page End -->
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#Receiver").change(function () {
+                if ($(this).prop("checked")) {
+                    $(this).val(true);
+                    $(".delivery-info").addClass("d-none");
+                } else {
+                    $(this).val(false);
+                    $(".delivery-info").removeClass("d-none");
+                }
+            });
+        });
+</script>
+}
